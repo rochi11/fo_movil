@@ -37,7 +37,15 @@
                 <Label *v-show="isLoggingIn" text="Olvidaste tu clave?"
                     class="login-label" @tap="forgotPassword()"></Label>
             </StackLayout>
-
+            <!-- <ScrollView>
+    <StackLayout>
+        <ListView height="150" for="items in respuesta">
+            <v-template>
+               <Label :text="items.name" style="width: 60%" />
+            </v-template>
+        </ListView>
+    </StackLayout>
+</ScrollView> -->
             <!-- <Label class="login-label sign-up-label" @tap="toggleForm">
                 <FormattedString>
                     <Span :text="isLoggingIn ? 'Don’t have an account? ' : 'Back to Login'"></Span>
@@ -49,7 +57,8 @@
 </template>
 
 <script>
-import * as http from "http";
+// import * as http from "http";
+import axios from "axios";
     export default {
         data(){
             return{
@@ -60,30 +69,69 @@ import * as http from "http";
                     usuario: "Administrador",
                     clave: "123456"
                 },
-                respuesta: '',
-                bandera: ''
+                respuestas: [
+                    {name:'Loki',ape:'feo'},
+                    {name:'Fredo',ape:'feo'},
+                    {name:'Mayquis',ape:'feo'},
+                    {name:'Martin',ape:'feo'}
+                    ],
+                bandera: '',
+                respuesta: []
             }
         },
         methods:{
             toggleForm() {
                 this.isLoggingIn = !this.isLoggingIn;
             },
-            submit() {
-                // if (!this.user.ruc || !this.user.usuario || !this.user.clave) {
-                http.request({
-                    url: "http://fo2_back.local/api/login",
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    content: JSON.stringify({
-                        ruc: "20434178780",
-                        usuario: "Administrador",
-                        clave: "123456"
-                    })
-                }).then((response) => {
-                    let result = response.content.toJSON();
-                    this.alert(result)
-                }, (e) => {
-                });
+            submit() {                  
+
+                // axios({ method: "POST", "url": "http://fo2_back.facturaonline.pe/api/login",
+                //     ruc: '20434178780',
+                //     usuario: 'Administrador',
+                //     clave: '123456' 
+                // }).then(result => {
+                //     this.respuesta = response.data,
+                //     this.alert('ok lista')
+                // }, error => {
+                //    this.alert('error') 
+                // });
+
+
+                axios
+                .post('http://fo2_back.facturaonline.pe/api/login', 
+                {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+                {                    
+                        ruc: '20434178780',
+                        usuario: 'Administrador',
+                        clave: '123456'                                        
+                })
+                .then((response) => ((
+                   this.respuesta = response.data,
+                  this.alert('ok lista')
+                )))
+                .catch((error) => ((
+                    // this.alert(error.response.data)
+                      this.alert('error') 
+                )));   
+                
+                
+
+                // axios.get('https://pokeapi.co/api/v2/pokemon',{
+                //     params:{
+                //         limit: 51
+                //     }                    
+                // })
+                // .then((response) => ((
+                //    this.respuesta = response.data.results,
+                //   this.alert('ok lista')
+                // )))
+                // .catch((error) => ((
+                //     // this.alert(error.response.data)
+                //       this.alert('error') 
+                // )));
+                  
             },
             login() {
                 this.$backendService
