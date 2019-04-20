@@ -3,8 +3,6 @@
         <FlexboxLayout class="page">
             <StackLayout class="form loginpersonalizado">
                 <Image class="logo" src="~/images/logofo2b.png"></Image>
-                
-
                 <GridLayout rows="auto, auto, auto">
                     <StackLayout row="0" class="input-field">
                         <TextField class="input" hint="RUC" :isEnabled="!processing"
@@ -37,15 +35,6 @@
                 <Label *v-show="isLoggingIn" text="Olvidaste tu clave?"
                     class="login-label" @tap="forgotPassword()"></Label>
             </StackLayout>
-            <!-- <ScrollView>
-    <StackLayout>
-        <ListView height="150" for="items in respuesta">
-            <v-template>
-               <Label :text="items.name" style="width: 60%" />
-            </v-template>
-        </ListView>
-    </StackLayout>
-</ScrollView> -->
             <!-- <Label class="login-label sign-up-label" @tap="toggleForm">
                 <FormattedString>
                     <Span :text="isLoggingIn ? 'Don’t have an account? ' : 'Back to Login'"></Span>
@@ -57,8 +46,17 @@
 </template>
 
 <script>
-// import * as http from "http";
 import axios from "axios";
+import Factura from "./Factura";
+const config = {
+       headers: {
+            'Content-type': 'application/json; charset=utf-8',
+            'Access-Control-Allow-Origin':'*',
+            'Access-Control-Allow-Methods': 'POST',
+            'Access-Control-Allow-Headers':'*',
+            'cache-control': 'no-cache'
+          }
+}
     export default {
         data(){
             return{
@@ -83,55 +81,32 @@ import axios from "axios";
             toggleForm() {
                 this.isLoggingIn = !this.isLoggingIn;
             },
-            submit() {                  
-
-                // axios({ method: "POST", "url": "http://fo2_back.facturaonline.pe/api/login",
-                //     ruc: '20434178780',
-                //     usuario: 'Administrador',
-                //     clave: '123456' 
-                // }).then(result => {
-                //     this.respuesta = response.data,
-                //     this.alert('ok lista')
-                // }, error => {
-                //    this.alert('error') 
-                // });
-
-
+            submit() {                 
                 axios
-                .post('http://fo2_back.facturaonline.pe/api/login', 
+                .post('https://demofoapi2.facturaonline.pe/api/login', 
                 {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-                {                    
-                        ruc: '20434178780',
-                        usuario: 'Administrador',
-                        clave: '123456'                                        
+                    ruc: '20434178780',
+                    usuario: 'Administrador',
+                    clave: '123456'  
+                },
+                {
+                    headers: {
+                        'Content-type': 'application/json; charset=utf-8',
+                        'Access-Control-Allow-Origin':'*',
+                        'Access-Control-Allow-Methods': 'POST',
+                        'Access-Control-Allow-Headers':'*',
+                        'cache-control': 'no-cache'
+                    }
                 })
-                .then((response) => ((
-                   this.respuesta = response.data,
-                  this.alert('ok lista')
-                )))
-                .catch((error) => ((
+                .then(response => (
+                   this.respuesta = response.data.response.msg,
+                  this.alert(this.respuesta),
+                  this.$navigateTo(Factura, { clearHistory: true })
+                ))
+                .catch(error => (
                     // this.alert(error.response.data)
                       this.alert('error') 
-                )));   
-                
-                
-
-                // axios.get('https://pokeapi.co/api/v2/pokemon',{
-                //     params:{
-                //         limit: 51
-                //     }                    
-                // })
-                // .then((response) => ((
-                //    this.respuesta = response.data.results,
-                //   this.alert('ok lista')
-                // )))
-                // .catch((error) => ((
-                //     // this.alert(error.response.data)
-                //       this.alert('error') 
-                // )));
-                  
+                ));   
             },
             login() {
                 this.$backendService

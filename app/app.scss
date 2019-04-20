@@ -7,3 +7,11 @@
 
 // Import common styles
 @import 'app-common';
+// @import '~nativescript-theme-core/css/core.light.css';
+.fa {
+  font-family: FontAwesome, fontawesome-webfont;
+}
+
+.ion{
+  font-family: "ionicons";
+}
