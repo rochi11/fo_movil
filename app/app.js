@@ -2,9 +2,12 @@ import Vue from "nativescript-vue";
 import routes from "./routes";
 import BackendService from "./services/backend-service";
 import Login from "./components/Login";
+import Factura from "./components/Factura";
 import VueDevtools from 'nativescript-vue-devtools';
 import RadSideDrawer from "nativescript-ui-sidedrawer/vue";
 import { TNSFontIcon, fonticon } from 'nativescript-fonticon';
+import FloatLabel from './components/custom/FloatLabel';
+Vue.component('FloatLabel', FloatLabel);
 const backendService = new BackendService();
 Vue.prototype.$backendService = backendService;
 TNSFontIcon.debug = false;
@@ -24,7 +27,8 @@ new Vue({
             <Login />
         </Frame>`,
     components: {
-        Login
+        Login,
+        Factura
     },
-    render: h => h("frame", [h(backendService.isLoggedIn() ? routes.login : routes.factura)])
+    render: h => h("frame", [h(backendService.isLoggedIn() ? routes.factura : routes.factura)])
 }).$start();

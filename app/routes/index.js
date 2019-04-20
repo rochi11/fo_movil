@@ -3,6 +3,6 @@ import Factura from "../components/Factura";
 
 const routes = {
     login: Login,
-    home: Factura
+    factura: Factura
 }
 export default routes;
