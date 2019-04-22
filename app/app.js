@@ -10,7 +10,7 @@ import FloatLabel from './components/custom/FloatLabel';
 Vue.component('FloatLabel', FloatLabel);
 const backendService = new BackendService();
 Vue.prototype.$backendService = backendService;
-TNSFontIcon.debug = false;
+TNSFontIcon.debug = true;
 TNSFontIcon.paths = {
     'fa': './fonts/font-awesome.css',
     'ion': './fonts/ionicons.css',

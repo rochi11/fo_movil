@@ -15,34 +15,50 @@
 							row="0" class="status-profile" src="~/assets/images/me.png" />
 			</GridLayout>
 
-			<GridLayout row="1" rows="40,40,40,40,80" columns="20,*,*,20">
-				<FloatLabel placeholder="RUC" row="0" col="1" colSpan="2" />
-				<FloatLabel placeholder="Razon Social" row="1" col="1" colSpan="2" />
-				<FloatLabel placeholder="Dirección Fiscal" row="2" col="1" colSpan="2" />
-				<FloatLabel placeholder="Serie" row="3" col="1" />
-				<FloatLabel placeholder="Moneda" row="3" col="2" />
-				<FloatLabel placeholder="Fecha" row="4" col="2" />
-			</GridLayout>
+			<AbsoluteLayout>
+				<GridLayout top="50" row="1" rows="40,40,40,40,40,80" columns="20,*,*,20">
+					<SearchBar row="0" col="1" colSpan="2" hint="Ingrese RUC" :text="searchPhrase" v-model="ruc" @textChange="getReceivers" @submit="onSubmit" />
+					<FloatLabel placeholder="Razon Social" row="2" col="1" colSpan="2" />
+					<FloatLabel placeholder="Dirección Fiscal" row="3" col="1" colSpan="2" />
+					<FloatLabel placeholder="Serie" row="4" col="1" />
+					<FloatLabel placeholder="Moneda" row="5" col="2" />
+					<FloatLabel placeholder="Fecha" row="6" col="2" />
+				</GridLayout>
+				<GridLayout v-if="listarec" top="90" margin="10" width="100%" height="250" backgroundColor="white">
+					<ListView for="item in listaReceptores" @itemTap="onItemTap">
+						<v-template>
+							<Label :text="item.razonSocial" />
+						</v-template>
+					</ListView>
+				</GridLayout>
+			</AbsoluteLayout>
 			<GridLayout width="90%" height="100" row="2" rows="40,60" columns="30,85,30,*,40,30" borderWidth="1" borderColor="#ccc" verticalAlignment="top">
-				<Label row="0" col="2" :text="'fa-tags' | fonticon" class="fa description-icon"
+				<Label row="0" col="2" :text="'fa-tags' | fonticon" class="fa description-icon" 
 					textWrap="true" /> 
-				<Label row="0" col="3" margin="8" class="description-text" text="Productos y Servicios"
+				<Label row="0" col="3" margin="8" class="description-text" text="Productos y Servicios" 
 					textWrap="true" />
-				<Button row="1" col="1" colSpan="4" height="30" margin="0" class="btn btn-primary" padding="0" text="Agregar Items" @tap="showItem(items[0])"></Button>
+				<!-- <Button row="1" col="1" colSpan="4" height="30" margin="0" class="btn btn-primary" padding="0" text="Agregar Items" @tap="showItem(items[0])"></Button>
+				 -->
+				 
+				<Label row="1" col="2" :text="'fa-plus' | fonticon" class="fa plus-icon"
+					textWrap="true" />
+				<Label row="1" col="3" class="description-text" text="Agregar Items" @tap="showItem(items[0])"></Label>
+
 			</GridLayout>
 			
-			<StackLayout row="3">
-				<ScrollView>
-					<StackLayout verticalAlignment="top"
-						horizontalAlignment="left">
-						<Label row="0" col="2" colSpan="2" text="Totales" />
-						<Label placeholder="IGV:" row="1" col="1" />
-						<FloatLabel placeholder="monto igv" row="1" col="2" />
-						<Label placeholder="Gravada:" row="2" col="1" />
-						<FloatLabel placeholder="monto gravada" row="2" col="2" />
-					</StackLayout>
-				</ScrollView>
-			</StackLayout>
+			<GridLayout marginTop="15" marginBottom="5" row="3" rows="auto,auto,auto,auto,auto,auto,auto,auto" columns="30,auto,auto,30">
+                    <Label row="0" col="2" text="Totales" class="description-text"></Label>
+					
+                    <Label row="1" col="2" text="Total IGV:"></Label>
+                    
+                    <Label row="2" col="2" text="Total Gravada:"></Label>
+                    
+                    <Label row="3" col="2" text="Total Exonerada:"></Label>
+                    
+                    <Label row="4" col="2" text="Total Inafecta:"></Label>
+                    
+                    <Label row="5" col="2" text="Importe Total:"></Label>
+                </GridLayout>
 
 			<navBottom row="4" />
 
@@ -51,12 +67,12 @@
 </template>
 <script>
 	// import { SwissArmyKnife } from "nativescript-swiss-army-knife";
+	import axios from "axios";
 	import { isIOS, isAndroid } from 'tns-core-modules/platform'
 	import navBottom from "./custom/navBottom";
 	import Item from "./custom/item";
 	import Category from "./custom/category";
 	import ItemDetails from "./ItemDetails";
-
 	const gestures = require("ui/gestures"); 
 	const app = require("application");
 
@@ -78,6 +94,9 @@ export default {
 	},
 	data() {
 		return {
+			ruc: '',
+			listarec: false,
+			listaReceptores: [],
 			lastDelY: 0,
 			headerCollapsed: false,
 			selectedTab: 0,
@@ -104,6 +123,40 @@ export default {
 		};
 	},
 	methods: {
+		onItemTap(){
+
+		},
+		getReceivers(){
+			this.listarec = true,
+			console.log("yeeeeeee");
+			if(this.ruc.length > 3){
+				axios
+                .post('https://demofoapi2.facturaonline.pe/api/receptores/lista', 
+                {
+                    token: '1eace214726acbd1d84dee38fd912857b7b37075c382545d5787e873efb41853',
+					q: this.ruc,
+					tipoRec: '6'
+                },
+                {
+                    headers: {
+                        'Content-type': 'application/json; charset=utf-8',
+                        'Access-Control-Allow-Origin':'*',
+                        'Access-Control-Allow-Methods': 'POST',
+                        'Access-Control-Allow-Headers':'*',
+                        'cache-control': 'no-cache'
+                    }
+                })
+                .then(response => (
+                   this.listaReceptores = response.data,
+					console.log(this.listaReceptores)
+                  
+                ))
+                .catch(error => (
+                    // this.alert(error.response.data)
+                      this.alert('error') 
+                ));
+			}
+		},
 		search(){
 			console.log('search')
 		},

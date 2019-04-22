@@ -7,33 +7,29 @@
                     horizontalAlignment="left" @tap="close" :text="'fa-arrow-left' | fonticon"
                     class="fa close" fontSize="24" />
             </GridLayout>
-            <GridLayout rows="auto,auto,auto,auto" columns="auto" class="content">
-
-                <GridLayout class="anim-itemInfo" marginTop="15" row="1"
-                    width="100%" columns="auto,*" rows="auto,auto,auto,auto"
-                    verticalAlignment="center">
-                    <Label :text="categoryIcon | fonticon" row="0" col="0"
-                        rowSpan="2" :backgroundColor="item.categoryTag" class="fa category-icon" />
-                    <Label row="0" col="1" class="item-name" textwrap="true"
-                        verticalAlignment="bottom" horizontalAlignment="left"
-                        :text="item.name" />
-                </GridLayout>
-
-                <StackLayout class="line anim-likes" row="2" width="100%"
-                    marginTop="10" />
-            </GridLayout>
-
-            <StackLayout width="100%" class="lineBreak anim-likes" />
-
-            <Gridlayout rows="auto,*" class="content anim-content" marginTop="15">
-                <GridLayout row="1" rows="auto" marginBottom="5" columns="auto, auto">
-                    <Label col="0" :text="'fa-tags' | fonticon" class="fa description-icon"
+        
+            
+                <GridLayout marginTop="15" marginBottom="5" rows="auto,auto,auto,auto,auto,auto,auto,auto" columns="30,auto,auto,30">
+                    <Label row="0" col="1" :text="'fa-angellist' | fonticon" class="fa description-icon"
                         textWrap="true" />
-                    <Label col="1" class="description-text" text="Description"
+                    <FloatLabel placeholder="Cantidad" row="0" col="2" />
+                    <Label row="1" col="1" :text="'fa-angellist' | fonticon" class="fa description-icon"
                         textWrap="true" />
+                    <FloatLabel placeholder="Unidad Medida" row="1" col="2" />
+                    <Label row="2" col="1" :text="'fa-angellist' | fonticon" class="fa description-icon"
+                        textWrap="true" />
+                    <FloatLabel placeholder="Cod. Producto" row="2" col="2" />
+                    <Label row="3" col="1" :text="'fa-angellist' | fonticon" class="fa description-icon"
+                        textWrap="true" />
+                    <FloatLabel placeholder="Descripción" row="3" col="2" />
+                    <Label row="4" col="1" :text="'fa-angellist' | fonticon" class="fa description-icon"
+                        textWrap="true" />
+                    <FloatLabel placeholder="Precio Unitario" row="4" col="2" />
+                    <Label row="5" col="1" :text="'fa-angellist' | fonticon" class="fa description-icon"
+                        textWrap="true" />
+                    <FloatLabel placeholder="Valor Unitario" row="5" col="2" />
                 </GridLayout>
-            </Gridlayout>
-
+    
         </StackLayout>
     </Page>
 </template>
