@@ -35,12 +35,6 @@
                 <Label *v-show="isLoggingIn" text="Olvidaste tu clave?"
                     class="login-label" @tap="forgotPassword()"></Label>
             </StackLayout>
-            <!-- <Label class="login-label sign-up-label" @tap="toggleForm">
-                <FormattedString>
-                    <Span :text="isLoggingIn ? 'Don’t have an account? ' : 'Back to Login'"></Span>
-                    <Span :text="isLoggingIn ? 'Sign up' : ''" class="bold"></Span>
-                </FormattedString>
-            </Label> -->
         </FlexboxLayout>
     </Page>
 </template>
